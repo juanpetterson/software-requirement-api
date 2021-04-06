@@ -15,7 +15,8 @@ const show = async (request: Request, response: Response) => {
 const getUserById = async (request: Request, response: Response) => {
   try {
     const { id } = request.params;
-    const user = User.findById(id);
+    const user = await User.findById(id);
+    console.log(user);
 
     response.status(200).json(user);
   } catch (error) {
@@ -39,7 +40,7 @@ const save = async (request: Request, response: Response) => {
       createdAt,
       updatedAt,
     });
-    user.save();
+    await user.save();
 
     response.status(200).json(user);
   } catch (error) {
@@ -55,15 +56,19 @@ const update = async (request: Request, response: Response) => {
     const updatedAt = new Date();
     const hashedPassword = await bcrypt.hash(password, 8);
 
-    const user = await User.findOneAndUpdate({
-      _id: id,
-      name,
-      password: hashedPassword,
-      isAdmin,
-      updatedAt,
-    });
+    const user = await User.findById(id);
+    if (user) {
+      await user.update({
+        name,
+        password: hashedPassword,
+        isAdmin,
+        updatedAt,
+      });
 
-    response.status(200).json(user);
+      response.status(200).json(user);
+    }
+
+    response.status(404).json({ message: 'User not found' });
   } catch (error) {
     console.log(error.trace);
   }

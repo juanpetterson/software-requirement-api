@@ -2,6 +2,22 @@ import User from '@models/User';
 import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 
+const me = async (request: Request, response: Response) => {
+  try {
+    console.log(request.userId);
+    console.log(request.headers);
+
+    // get token
+    // decode userid
+    // findbyid
+    const userList = await User.findById(request.userId);
+
+    response.status(200).json(userList);
+  } catch (error) {
+    console.log(error.trace);
+  }
+};
+
 const show = async (request: Request, response: Response) => {
   try {
     const userList = await User.find();
@@ -85,4 +101,4 @@ const remove = async (request: Request, response: Response) => {
   }
 };
 
-export default { getUserById, show, save, update, remove };
+export default { me, getUserById, show, save, update, remove };

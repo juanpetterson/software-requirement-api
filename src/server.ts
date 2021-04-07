@@ -1,3 +1,4 @@
+require('dotenv').config();
 import express from 'express';
 import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
@@ -6,6 +7,8 @@ import cors from 'cors';
 import logging from './configs/logging';
 import userRoutes from './routes/userRoutes/UserRoutes';
 import authRoutes from './routes/authRoutes/AuthRoutes';
+
+import authMiddleware from './middlewares/auth';
 
 const NAMESPACE = 'Server';
 const app = express();
@@ -38,7 +41,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use('/api', userRoutes);
-app.use('/api', authRoutes);
+app.use('/api', authMiddleware, userRoutes);
+app.use('/api', authMiddleware, authRoutes);
 
 app.listen(3333);

@@ -1,7 +1,7 @@
-import jwt from "jsonwebtoken";
-import authConfig from "../configs/auth";
-import { promisify } from "util";
-import { NextFunction, Request, Response } from "express";
+import jwt from 'jsonwebtoken';
+import authConfig from '../configs/auth';
+import { promisify } from 'util';
+import { NextFunction, Request, Response } from 'express';
 
 const authMiddleware = async (
   req: Request,
@@ -11,17 +11,18 @@ const authMiddleware = async (
   const authHeader = req.headers.authorization;
 
   if (!authHeader) {
-    return res.status(401).json({ error: "Token not provided" });
+    return res.status(401).json({ error: 'Token not provided' });
   }
 
-  const [, token] = authHeader.split(" ");
+  const [, token] = authHeader.split(' ');
 
   try {
-    await promisify(jwt.verify)(token, authConfig.secret);
+    const decoded = await promisify(jwt.verify)(token, authConfig.secret);
+    req.userId = decoded.id;
 
     return next();
   } catch (error) {
-    return res.status(401).json({ error: "Token invalid" });
+    return res.status(401).json({ error: 'Token invalid' });
   }
 };
 

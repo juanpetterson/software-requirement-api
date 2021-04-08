@@ -2,14 +2,12 @@ import User from '@models/User';
 import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 
-const me = async (request: Request, response: Response) => {
-  try {
-    console.log(request.userId);
-    console.log(request.headers);
+export interface RequestWIthUser extends Request {
+  userId: string;
+}
 
-    // get token
-    // decode userid
-    // findbyid
+const me = async (request: RequestWIthUser, response: Response) => {
+  try {
     const userList = await User.findById(request.userId);
 
     response.status(200).json(userList);

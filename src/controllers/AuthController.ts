@@ -1,7 +1,9 @@
 import User from '@models/User';
 import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
+import jwt, { Secret } from 'jsonwebtoken';
+
+import authConfig from '../configs/auth';
 
 const authenticate = async (request: Request, response: Response) => {
   try {
@@ -15,7 +17,10 @@ const authenticate = async (request: Request, response: Response) => {
       if (matchPassword) {
         return response
           .status(200)
-          .json({ user, token: jwt.sign({ id: user._id }, 'engisoft') });
+          .json({
+            user,
+            token: jwt.sign({ id: user._id }, authConfig.secret as Secret),
+          });
       }
     }
 

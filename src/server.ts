@@ -41,7 +41,7 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use('/api', authRoutes);
 app.use('/api', authMiddleware, userRoutes);
-app.use('/api', authMiddleware, authRoutes);
 
 app.listen(3333);

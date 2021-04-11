@@ -44,7 +44,6 @@ const save = async (request: Request, response: Response) => {
 
     const hashedPassword = await bcrypt.hash(password, 8);
     const createdAt = new Date();
-    const updatedAt = new Date();
 
     const user = new User({
       name,
@@ -52,7 +51,7 @@ const save = async (request: Request, response: Response) => {
       password: hashedPassword,
       isAdmin,
       createdAt,
-      updatedAt,
+      updatedAt: null,
     });
     await user.save();
 

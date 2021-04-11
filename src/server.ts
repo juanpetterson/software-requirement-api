@@ -5,8 +5,9 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 
 import logging from './configs/logging';
-import userRoutes from './routes/userRoutes/UserRoutes';
 import authRoutes from './routes/authRoutes/AuthRoutes';
+import userRoutes from './routes/userRoutes/UserRoutes';
+import requirementRoutes from './routes/requirementRoutes/RequirementRoutes';
 
 import authMiddleware from './middlewares/auth';
 
@@ -43,5 +44,6 @@ app.use((req, res, next) => {
 
 app.use('/api', authRoutes);
 app.use('/api', authMiddleware, userRoutes);
+app.use('/api', requirementRoutes);
 
 app.listen(3333);

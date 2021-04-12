@@ -2,15 +2,27 @@ import mongoose, { Schema, model } from 'mongoose';
 import IRequirement from '../interfaces/requirement';
 import logging from '../configs/logging';
 
-const RequirementSchema = new Schema({
+const RequiredString = {
   type: String,
-  code: String,
-  requirement: String,
-  description: String,
+  required: true,
+};
+
+const RequirementSchema = new Schema({
+  type: { ...RequiredString, enum: ['FUNCTIONAL', 'NOT_FUNCTIONAL'] },
+  code: RequiredString,
+  requirement: RequiredString,
+  description: RequiredString,
   observations: String,
   versioning: Number,
-  projectId: { type: mongoose.Schema.Types.ObjectId, ref: 'Projects' },
-  createdAt: Date,
+  projectId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Projects',
+    required: true,
+  },
+  createdAt: {
+    type: Date,
+    required: true,
+  },
   updatedAt: Date,
 });
 

@@ -3,12 +3,18 @@ import IProject from '../interfaces/project';
 import logging from '../configs/logging';
 
 const ProjectSchema = new Schema({
-  name: String,
+  name: {
+    type: String,
+    required: true,
+  },
   area: String,
   port: String,
   targets: String,
-  observations: Number,
-  createdAt: Date,
+  observations: String,
+  createdAt: {
+    type: Date,
+    required: true,
+  },
   updatedAt: Date,
 });
 

@@ -8,6 +8,7 @@ import logging from './configs/logging';
 import authRoutes from './routes/authRoutes/AuthRoutes';
 import userRoutes from './routes/userRoutes/UserRoutes';
 import requirementRoutes from './routes/requirementRoutes/RequirementRoutes';
+import projectRoutes from './routes/projectRoutes/ProjectRoutes';
 
 import authMiddleware from './middlewares/auth';
 
@@ -44,6 +45,7 @@ app.use((req, res, next) => {
 
 app.use('/api', authRoutes);
 app.use('/api', authMiddleware, userRoutes);
-app.use('/api', requirementRoutes);
+app.use('/api', authMiddleware, requirementRoutes);
+app.use('/api', authMiddleware, projectRoutes);
 
 app.listen(3333);

@@ -15,16 +15,14 @@ const authenticate = async (request: Request, response: Response) => {
       const matchPassword = await bcrypt.compare(password, user.password);
 
       if (matchPassword) {
-        return response
-          .status(200)
-          .json({
-            user,
-            token: jwt.sign({ id: user._id }, authConfig.secret as Secret),
-          });
+        return response.status(200).json({
+          user,
+          token: jwt.sign({ id: user._id }, authConfig.secret as Secret),
+        });
       }
     }
 
-    response.status(401).json({ message: 'User not found' });
+    return response.status(401).json({ message: 'User not found' });
   } catch (error) {
     console.log(error.trace);
   }

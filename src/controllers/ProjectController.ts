@@ -5,7 +5,7 @@ const show = async (request: Request, response: Response) => {
   try {
     const projects = await Project.find();
 
-    response.status(200).json(projects);
+    return response.status(200).json(projects);
   } catch (error) {
     console.log(error.trace);
   }
@@ -16,7 +16,7 @@ const find = async (request: Request, response: Response) => {
     const { id } = request.params;
     const projects = await Project.findById(id);
 
-    response.status(200).json(projects);
+    return response.status(200).json(projects);
   } catch (error) {
     console.log(error.trace);
   }
@@ -40,7 +40,7 @@ const save = async (request: Request, response: Response) => {
 
     await project.save();
 
-    response.status(200).json(project);
+    return response.status(200).json(project);
   } catch (error) {
     console.log(error.trace);
   }
@@ -62,7 +62,7 @@ const update = async (request: Request, response: Response) => {
       updatedAt,
     });
 
-    response.status(200).json(project);
+    return response.status(200).json(project);
   } catch (error) {
     console.log(error.trace);
   }
@@ -74,7 +74,7 @@ const remove = async (request: Request, response: Response) => {
 
     await Project.findByIdAndRemove(id);
 
-    response.sendStatus(200);
+    return response.sendStatus(200);
   } catch (error) {
     console.log(error.trace);
   }

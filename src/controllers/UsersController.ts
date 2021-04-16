@@ -10,7 +10,7 @@ const me = async (request: RequestWIthUser, response: Response) => {
   try {
     const userList = await User.findById(request.userId);
 
-    response.status(200).json(userList);
+    return response.status(200).json(userList);
   } catch (error) {
     console.log(error.trace);
   }
@@ -20,7 +20,7 @@ const show = async (request: Request, response: Response) => {
   try {
     const userList = await User.find();
 
-    response.status(200).json(userList);
+    return response.status(200).json(userList);
   } catch (error) {
     console.log(error.trace);
   }
@@ -30,9 +30,8 @@ const getUserById = async (request: Request, response: Response) => {
   try {
     const { id } = request.params;
     const user = await User.findById(id);
-    console.log(user);
 
-    response.status(200).json(user);
+    return response.status(200).json(user);
   } catch (error) {
     console.log(error.trace);
   }
@@ -55,7 +54,7 @@ const save = async (request: Request, response: Response) => {
     });
     await user.save();
 
-    response.status(200).json(user);
+    return response.status(200).json(user);
   } catch (error) {
     console.log(error.trace);
   }
@@ -78,10 +77,10 @@ const update = async (request: Request, response: Response) => {
         updatedAt,
       });
 
-      response.status(200).json(user);
+      return response.status(200).json(user);
     }
 
-    response.status(404).json({ message: 'User not found' });
+    return response.status(404).json({ message: 'User not found' });
   } catch (error) {
     console.log(error.trace);
   }
@@ -92,7 +91,7 @@ const remove = async (request: Request, response: Response) => {
     const { id } = request.params;
     await User.findByIdAndRemove(id);
 
-    response.sendStatus(200);
+    return response.sendStatus(200);
   } catch (error) {
     console.log(error.trace);
   }

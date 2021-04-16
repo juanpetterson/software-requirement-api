@@ -13,7 +13,18 @@ const RequirementSchema = new Schema({
   requirement: RequiredString,
   description: RequiredString,
   observations: String,
-  versioning: Number,
+  versioning: {
+    type: Number,
+    required: true,
+  },
+  complexity: {
+    type: String,
+    required: true,
+  },
+  priority: {
+    type: String,
+    required: true,
+  },
   projectId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Projects',

@@ -8,6 +8,8 @@ export default interface IRequirement extends Document {
   description: string;
   observations?: string;
   versioning: number;
+  complexity: string;
+  priority: string;
   projectId: string;
   createdAt: Date;
   updatedAt: Date;

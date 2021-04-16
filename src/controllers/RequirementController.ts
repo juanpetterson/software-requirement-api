@@ -3,26 +3,25 @@ import Requirement from '../models/Requirement';
 
 const show = async (request: Request, response: Response) => {
   try {
-    const requirements = await Requirement.find();
+    const { projectId } = request.query;
 
-    response.status(200).json(requirements);
+    const requirements = await Requirement.find({
+      projectId: projectId?.toString(),
+    });
+
+    return response.status(200).json(requirements);
   } catch (error) {
     console.log(error.trace);
   }
 };
 
-const find = async (request: Request, response: Response) => {
+const getRequirementById = async (request: Request, response: Response) => {
   try {
-    const { projectId } = request.query;
-    const findFields = { projectId: projectId?.toString() };
+    const { id } = request.params;
 
-    console.log('projectId', projectId);
+    const requirements = await Requirement.findById(id);
 
-    // pegar ultima versão do código de requisito
-
-    const requirements = await Requirement.find(findFields).sort('-versioning');
-
-    response.status(200).json(requirements);
+    return response.status(200).json(requirements);
   } catch (error) {
     console.log(error.trace);
   }
@@ -37,15 +36,16 @@ const save = async (request: Request, response: Response) => {
       description,
       observations,
       versioning,
+      complexity,
+      priority,
       projectId,
     } = request.body;
 
     const createdAt = new Date();
-
     const existsRequirement = await Requirement.find({ code, projectId });
 
-    if (existsRequirement) {
-      response.status(409).json({
+    if (existsRequirement.length > 0) {
+      return response.status(409).json({
         message: 'Requirement code already exists in this project',
       });
     }
@@ -57,6 +57,8 @@ const save = async (request: Request, response: Response) => {
       description,
       observations,
       versioning,
+      complexity,
+      priority,
       projectId,
       createdAt,
       updatedAt: null,
@@ -64,7 +66,7 @@ const save = async (request: Request, response: Response) => {
 
     await requirement.save();
 
-    response.status(200).json(requirement);
+    return response.status(200).json(requirement);
   } catch (error) {
     console.log(error.trace);
   }
@@ -80,10 +82,24 @@ const update = async (request: Request, response: Response) => {
       description,
       observations,
       versioning,
+      complexity,
+      priority,
+      projectId,
     } = request.body;
 
     const updatedAt = new Date();
 
+    const existsRequirement = await Requirement.find({
+      code,
+      projectId,
+      _id: { $ne: id },
+    });
+
+    if (existsRequirement.length > 0) {
+      return response.status(409).json({
+        message: 'Requirement code already exists in this project',
+      });
+    }
     const requirement = await Requirement.findByIdAndUpdate(id, {
       type,
       code,
@@ -91,10 +107,13 @@ const update = async (request: Request, response: Response) => {
       description,
       observations,
       versioning,
+      complexity,
+      priority,
+      projectId,
       updatedAt,
     });
 
-    response.status(200).json(requirement);
+    return response.status(200).json(requirement);
   } catch (error) {
     console.log(error.trace);
   }
@@ -106,10 +125,10 @@ const remove = async (request: Request, response: Response) => {
 
     await Requirement.findByIdAndRemove(id);
 
-    response.sendStatus(200);
+    return response.sendStatus(200);
   } catch (error) {
     console.log(error.trace);
   }
 };
 
-export default { show, find, save, update, remove };
+export default { getRequirementById, show, save, update, remove };

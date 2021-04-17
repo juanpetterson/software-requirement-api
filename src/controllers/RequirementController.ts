@@ -7,7 +7,7 @@ const show = async (request: Request, response: Response) => {
 
     const requirements = await Requirement.find({
       projectId: projectId?.toString(),
-    });
+    }).sort('-versioning');
 
     return response.status(200).json(requirements);
   } catch (error) {
@@ -42,13 +42,6 @@ const save = async (request: Request, response: Response) => {
     } = request.body;
 
     const createdAt = new Date();
-    const existsRequirement = await Requirement.find({ code, projectId });
-
-    if (existsRequirement.length > 0) {
-      return response.status(409).json({
-        message: 'Requirement code already exists in this project',
-      });
-    }
 
     const requirement = new Requirement({
       type,

@@ -19,10 +19,7 @@ const UserSchema = new Schema({
     type: Date,
     required: true,
   },
-  updatedAt: {
-    type: Date,
-    required: true,
-  },
+  updatedAt: Date,
 });
 
 UserSchema.post<IUser>('save', function () {

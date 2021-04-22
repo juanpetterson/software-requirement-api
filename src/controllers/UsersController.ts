@@ -52,6 +52,7 @@ const save = async (request: Request, response: Response) => {
       createdAt,
       updatedAt: null,
     });
+
     await user.save();
 
     return response.status(200).json(user);
